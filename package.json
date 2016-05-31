@@ -1,0 +1,20 @@
+{
+  "name": "moin",
+  "description": "a Simple Microservice Server",
+  "keywords": [
+    "microservice",
+    "application-server",
+    "event-driven"
+  ],
+  "author": "Torben Hartmann",
+  "homapage": "http://moinjs.github.io/",
+  "license": "MIT",
+  "repository": "moinjs/moin",
+  "engines": {
+    "node": ">=6.0"
+  },
+  "version": "0.0.1",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
+}
