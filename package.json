@@ -13,8 +13,13 @@
   "engines": {
     "node": ">=6.0"
   },
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {
-    "colors": "^1.1.2"
+    "cli-spinner": "^0.2.5",
+    "colors": "^1.1.2",
+    "moin-logo": "^1.0.0",
+    "moin-event-system": "^1.0.0",
+    "moin-service-loader": "^1.0.0",
+    "moin-fs-watcher": "^1.0.0"
   }
 }
