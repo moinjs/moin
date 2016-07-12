@@ -183,4 +183,7 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
     };
 };
 
-module.exports = moin().run().then(()=>moin.getApi());
+module.exports = function (config = {}) {
+    moin = moin(config);
+    return moin.run().then(()=>moin.getApi());
+};
