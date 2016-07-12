@@ -30,7 +30,7 @@ Object.deepExtend = function (destination, source) {
 };
 
 let modulePaths = [
-    path.join(__dirname, "node_modules")
+    path.join(__dirname, "node_modules"), path.join(path.dirname(module.parent.filename), "node_modules")
 ];
 let settings = {
     modulePaths: [],
