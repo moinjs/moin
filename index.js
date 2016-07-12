@@ -37,7 +37,7 @@ let settings = {
     servicePaths: []
 };
 
-module.exports = function (config = {}, cwd = path.dirname(module.parent.filename)) {
+let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
     let _modules = [];
     settings = Object.deepExtend(settings, config);
     let running = false;
@@ -136,10 +136,6 @@ module.exports = function (config = {}, cwd = path.dirname(module.parent.filenam
             settings.modulePaths.push(path);
             return this;
         },
-        addServicePath(path){
-            settings.modulePaths.push(path);
-            return this;
-        },
         getApi(){
             return _api;
         },
@@ -186,3 +182,5 @@ module.exports = function (config = {}, cwd = path.dirname(module.parent.filenam
 
     };
 };
+
+return moin.run().then(()=>moin.getApi());
