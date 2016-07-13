@@ -1,4 +1,6 @@
 # moin
+
+[![Join the chat at https://gitter.im/moinjs/moin](https://badges.gitter.im/moinjs/moin.svg)](https://gitter.im/moinjs/moin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![logo](https://raw.githubusercontent.com/moinjs/moin/master/logo.png)
 >Moin (pronounced [ˈmɔɪn]) is a German greeting meaning "hello" and in some places "goodbye".
 
