@@ -15,6 +15,8 @@ In Moin, you can filter the events on any property. You can even define dynamic 
  
 When you emit an event you can register for the return values of the handlers. This is utilized in the example below.
 
+#Docs
+You can read the docs at [moinjs.github.io](http://moinjs.github.io)
 #Sample: a small Webserver
 ###webserver/index.js
 ````javascript
