@@ -5,7 +5,6 @@ let PromiseEventEmitter = require("./lib/PromiseEventEmitter");
 let Logger = require("./lib/Logger");
 
 
-
 Array.prototype.unique = function () {
     let set = new Set();
     return this.filter(elem=> {
@@ -38,11 +37,12 @@ let settings = {
     },
     logging: {
         level: "debug",
-        disabled:[]
+        disabled: []
     }
 };
 
-let moin = function (cwd = path.dirname(module.parent.filename)) {
+let moin = function (cwd, init) {
+    console.log(init);
     let config = {};
     if (fs.existsSync(path.join(cwd, "config.json"))) {
         config = require(path.join(cwd, "config.json"));
@@ -183,6 +183,7 @@ let moin = function (cwd = path.dirname(module.parent.filename)) {
                         resolve(loadOrder);
                     });
                 }).then(function (modules) {
+                    if (init)return;
                     _modules = modules;
                     _modules.forEach(module=>module.load(_api, config[module.getName()]));
                     log.info(`${_modules.length} modules loaded. beginning startup`)
@@ -207,7 +208,7 @@ let moin = function (cwd = path.dirname(module.parent.filename)) {
     };
 };
 
-module.exports = function (config = {}) {
-    moin = moin(config);
+module.exports = function (cwd = path.dirname(module.parent.filename), init = false) {
+    moin = moin(cwd, init);
     return moin.run().then(()=>moin.getApi());
 };
