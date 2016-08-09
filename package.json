@@ -13,10 +13,10 @@
   "engines": {
     "node": ">=6.0"
   },
-  "bin":{
-    "moin":"bin/moin.js"
+  "bin": {
+    "moin": "bin/moin.js"
   },
-  "version": "1.0.6",
+  "version": "1.1.0",
   "dependencies": {
     "cli-spinner": "^0.2.5",
     "colors": "^1.1.2",
@@ -24,7 +24,7 @@
     "moin-fs-watcher": "^1.0.0",
     "moin-logo": "^1.0.0",
     "moin-service-loader": "^1.0.0",
-    "moin-remote-dispatcher":"^1.0.0",
+    "moin-remote-dispatcher": "^1.0.0",
     "object-merge": "^2.5.1"
   }
 }
