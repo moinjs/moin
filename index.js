@@ -4,7 +4,7 @@ let path = require("path");
 let PromiseEventEmitter = require("./lib/PromiseEventEmitter");
 let Logger = require("./lib/Logger");
 
-let log = new Logger("main");
+
 
 Array.prototype.unique = function () {
     let set = new Set();
@@ -33,14 +33,34 @@ let modulePaths = [
     path.join(__dirname, "node_modules"), path.join(path.dirname(module.parent.filename), "node_modules")
 ];
 let settings = {
-    modulePaths: [],
-    servicePaths: []
+    moin: {
+        modulePaths: []
+    },
+    logging: {
+        level: "debug",
+        disabled:[]
+    }
 };
 
-let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
+let moin = function (cwd = path.dirname(module.parent.filename)) {
+    let config = {};
+    if (fs.existsSync(path.join(cwd, "config.json"))) {
+        config = require(path.join(cwd, "config.json"));
+    }
+
+    let confStr = JSON.stringify(config);
+
+    Loader = Loader((conf)=> {
+        config = Object.deepExtend(conf, config);
+    });
+
     let _modules = [];
-    settings = Object.deepExtend(settings, config);
+    config = Object.deepExtend(settings, config);
     let running = false;
+
+    Logger = Logger(config.logging);
+    let log = new Logger("main");
+
 
     let _api = (function () {
         let custom = {};
@@ -90,7 +110,7 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
                         getLastValue(){
                             return lastValue;
                         },
-                        setArguments(arguments){
+                        setArguments(...arguments){
                             args = arguments;
                         },
                         stopPropagation(){
@@ -113,10 +133,6 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
         return api;
     })();
 
-    function scanForModules() {
-
-    }
-
     function scanForFolders(folders) {
         return Promise.all(folders.map(folder=> {
             return new Promise((resolve, reject)=> {
@@ -133,7 +149,7 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
 
     return {
         addModulePath(path){
-            settings.modulePaths.push(path);
+            settings.moin.modulePaths.push(path);
             return this;
         },
         getApi(){
@@ -142,15 +158,19 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
         run(){
             if (running)throw "Allready running";
             running = true;
-            settings.modulePaths = settings.modulePaths.concat(modulePaths).map(p=>path.resolve(p)).unique();
-            return scanForFolders(settings.modulePaths)
+            let lookupPaths = settings.moin.modulePaths.concat(modulePaths).map(p=>path.resolve(p)).unique();
+            return scanForFolders(lookupPaths)
                 .then((folders)=>Promise.all(folders.map(folder=>Loader(folder))))
                 .then((modules)=>modules.filter(m=>m != null && m.getType() == "module"))
                 .then(modules=> {
                     return new Promise((resolve, reject)=> {
                         let loadOrder = [];
+
                         while (modules.length > 0) {
-                            let resolvable = modules.filter(mod=>mod.isResolved());
+                            let resolvable = modules
+                                .filter(mod=>mod.isResolved())
+                                .filter(mod=>config[mod.getName()].active);
+
                             modules = modules.filter(mod=>!mod.isResolved());
                             if (resolvable.length == 0)throw "Cannot fullfill all dependencies";
                             loadOrder = loadOrder.concat(resolvable);
@@ -164,7 +184,7 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
                     });
                 }).then(function (modules) {
                     _modules = modules;
-                    _modules.forEach(module=>module.load(_api));
+                    _modules.forEach(module=>module.load(_api, config[module.getName()]));
                     log.info(`${_modules.length} modules loaded. beginning startup`)
                 }).then(function () {
                     log.startSpinner("Initializing Modules %s");
@@ -174,6 +194,10 @@ let moin = function (config = {}, cwd = path.dirname(module.parent.filename)) {
                     log.stopSpinner();
                 }).then(function () {
                     log.info("Startup complete");
+                    if (confStr != JSON.stringify(config)) {
+                        log.info("Change in Modules detected. Saving config.json");
+                        fs.writeFileSync(path.join(cwd, "config.json"), JSON.stringify(config, null, 2));
+                    }
                 })
                 .catch(function (e) {
                     log.error("Error in startup routine:", e);
