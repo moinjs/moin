@@ -42,7 +42,6 @@ let settings = {
 };
 
 let moin = function (cwd, init) {
-    console.log(init);
     let config = {};
     if (fs.existsSync(path.join(cwd, "config.json"))) {
         config = require(path.join(cwd, "config.json"));
