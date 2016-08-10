@@ -17,6 +17,28 @@ In Moin, you can filter the events on any property. You can even define dynamic 
  
 When you emit an event you can register for the return values of the handlers. This is utilized in the example below.
 
+#Installation
+Just install Moin as a global Package.
+```bash
+npm install -g moin
+```
+
+To ease the generation of configs and the creation of services you can use the yeoman generator:
+```bash
+   npm install -g yo generator-moin
+```
+
+To initialize the current directory for the use of moin just execute:
+```bash
+yo moin
+```
+
+To create a new service you can use:
+
+```bash
+yo moin:service
+```
+
 #Docs
 You can read the docs at [moinjs.github.io](http://moinjs.github.io)
 #Sample: a small Webserver
