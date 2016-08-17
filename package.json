@@ -25,6 +25,7 @@
     "moin-logo": "^1.0.0",
     "moin-service-loader": "^1.0.0",
     "moin-remote-dispatcher": "^1.0.0",
+    "moin-service-settings": "^1.0.0",
     "object-merge": "^2.5.1"
   }
 }
