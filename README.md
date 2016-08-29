@@ -25,7 +25,7 @@ npm install -g moin
 
 To ease the generation of configs and the creation of services you can use the yeoman generator:
 ```bash
-   npm install -g yo generator-moin
+npm install -g yo generator-moin
 ```
 
 To initialize the current directory for the use of moin just execute:
@@ -43,9 +43,9 @@ yo moin:service
 You can read the docs at [moinjs.github.io](http://moinjs.github.io)
 #Sample: a small Webserver
 ###webserver/index.js
-````javascript
+```js
 let app = require("express")();
-let server = app.listen(3000, function () {
+let server = app.listen(3000, ()=> {
     console.log("Webserver started")
 });
 
@@ -54,7 +54,8 @@ app.get("*", function (req, res) {
     moin.emit("httpRequest", {
         method: "get",
         path: req.path
-    }, 30000).then(({values,errors,stats})=> {
+    }, 30000)
+    .then(({values,errors,stats})=> {
         //See how many Listeners have responded.
         switch(values.length){
             case 0:
@@ -70,10 +71,8 @@ moin.registerUnloadHandler(()=>server.close());
 ````
 
 ###hello/index.js
-````javascript
-moin.on({event: "httpRequest", method: "get"}, (event)=> {
-    return `Moin, ${event.path}!`;
-});
+```js
+moin.on({event: "httpRequest", method: "get"}, (event)=>`Moin, ${event.path}!`);
 ````
 
 This example opens an express Webserver and emits an event, when a url is accessed. The hello service registeres for these events and returns a response, which is then served to the Browser. 
