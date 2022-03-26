@@ -6,18 +6,18 @@
 
 Moin is an event-driven microservice application server written in behalf of my bachelor thesis at the FH-Kiel.
 
-#What is it good for
-##Reloading of Code
+# What is it good for
+## Reloading of Code
 Imagine you set up a simple express Webserver. When you make changes to a route, you have to restart the whole application in order to see the changes.
 Moin watches your service directory and reloads your Module when something was changed. It automatically stops all your self-set timers, so you don't have to.
 
-##Advanced Event System
+## Advanced Event System
 Ever wanted to have more control over the Event filtering? In any normal Node Application you can only listen on event names.
 In Moin, you can filter the events on any property. You can even define dynamic checks like `{event:"httpRequest",method:(m)=>m=="get"||m=="post"}`.
  
 When you emit an event you can register for the return values of the handlers. This is utilized in the example below.
 
-#Installation
+# Installation
 Just install Moin as a global Package.
 ```bash
 npm install -g moin
@@ -39,10 +39,10 @@ To create a new service you can use:
 yo moin:service
 ```
 
-#Docs
+# Docs
 You can read the docs at [moinjs.github.io](http://moinjs.github.io)
-#Sample: a small Webserver
-###webserver/index.js
+# Sample: a small Webserver
+### webserver/index.js
 ```js
 let app = require("express")();
 let server = app.listen(3000, ()=> {
@@ -70,9 +70,9 @@ app.get("*", function (req, res) {
 moin.registerUnloadHandler(()=>server.close());
 ````
 
-###hello/index.js
+### hello/index.js
 ```js
 moin.on({event: "httpRequest", method: "get"}, (event)=>`Moin, ${event.path}!`);
 ````
 
-This example opens an express Webserver and emits an event, when a url is accessed. The hello service registeres for these events and returns a response, which is then served to the Browser. 
+This example opens an express Webserver and emits an event, when a url is accessed. The hello service registers for these events and returns a response, which is then served to the Browser. 
